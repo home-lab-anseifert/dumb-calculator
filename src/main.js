@@ -1,8 +1,8 @@
 import './style.css'
 import m from 'mithril'
-import { model } from './model.js'
-import { NumberInput } from './NumberInput.js'
-import { RadioInput } from './RadioInput.js'
+import model from './model.js'
+import NumberInputFn from './NumberInputFn.js'
+import RadioInputFn from './RadioInputFn.js'
 
 const app = {
   view: () => [
@@ -11,21 +11,23 @@ const app = {
       m('.infra',
         m('.node-info',
           m('.subject', 'enter the server count for your cluster'),
-          m(NumberInput, { id: 'control', text: 'Control Nodes' }),
-          m(NumberInput, { id: 'worker', text: 'Worker Nodes' }),
-          m(NumberInput, { id: 'infra', text: 'Infra Nodes' }),
+          NumberInputFn({ prop: 'control', text: 'Control Nodes' }),
+          NumberInputFn({ prop: 'worker', text: 'Worker Nodes' }),
+          NumberInputFn({ prop: 'infra', text: 'Infra Nodes' }),
           m('.core-count', "please enter the number of cores per server"),
-          [32, 64, 128].map(value => m(RadioInput, { name: 'cores', value })),
+          [32, 64, 128].map(value => RadioInputFn({ prop: 'cores', value })),
           m('.mem', "please enter the amount of memory per server (GB)" ),
-          m(NumberInput, { id: 'memory' }),
+          NumberInputFn({ prop: 'memory' }),
         ),
         m('.storage-info',
           m('.subject', 'enter in your storage information (GB)'),
-          m(NumberInput, { id: 'localtotal', clasName: 'storage', text: 'Local disk' }),
-          m(NumberInput, { id: 'filetotal', clasName: 'storage', text: 'File Storage' }),
-          m(NumberInput, { id: 'blocktotal', clasName: 'storage', text: 'Block Storage' }),
-          m(NumberInput, { id: 'objtotal', clasName: 'storage', text: 'Object Storage' }),
+          NumberInputFn({ prop: 'localtotal', clasName: 'storage', text: 'Local disk' }),
+          NumberInputFn({ prop: 'localtotal', clasName: 'storage', text: 'Local disk' }),
+          NumberInputFn({ prop: 'filetotal', clasName: 'storage', text: 'File Storage' }),
+          NumberInputFn({ prop: 'blocktotal', clasName: 'storage', text: 'Block Storage' }),
+          NumberInputFn({ prop: 'objtotal', clasName: 'storage', text: 'Object Storage' }),
         ),
+        m('pre', JSON.stringify(model, null, 2)),
         m('.totals-info',
           m('.subject', 'Totals for Infrastructure'),
             m('.t-int', 'CPU Total = ' + ((model.control * model.worker * model.infra) * model.cores)),
