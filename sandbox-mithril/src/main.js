@@ -1,9 +1,35 @@
 import './style.css'
 import m from 'mithril'
 
-const model = {
-  cores: null
-}
+const model = { 
+  control: null,
+  worker: null,
+  infra: null,
+  cores: null,
+  local: null,
+  file: null,
+  block: null,
+  object: null,
+  coretotal: null,
+  memory: null,
+  localtotal: null,
+  filetotal: null,
+  blocktotal: null,
+  objtotal: null,
+  totalnodes: null,
+  minRequireCoreControl: 4,
+  minRequireCoreWorker: 2,
+  minRequireCoreInfra: null,
+  minRequireMemControl: 16,
+  minRequireMemWorker: 8,
+  minRequireMemInfra: null,
+  minRequireDiskControl: 100,
+  minRequireDiskWorker: 100,
+  minRequireDiskInfra: null,
+  minRequireBootstrapCpu: 4,
+  minRequireBootstrapMem: 16,
+  minRequireBootstrapStorage: 100
+ }
 
 const app = {
   view: () => [
@@ -11,13 +37,14 @@ const app = {
     m('.wrapper',
       m('.infra',
         m('.node-info',
-          m('.subject', 'enter the number of each of the following'),
+          m('.subject', 'enter the server count for your cluster'),
           m('label.control', { for: 'control' }, 'Control Nodes'),
           m('input',
             {
               type: 'number',
               id: 'control',
-              min: 1
+              min: 1,
+              oninput: () => model.control = event.target.value
             }
           ),
           m('label.worker', { for: 'worker' }, 'Worker Nodes'),
@@ -25,7 +52,8 @@ const app = {
             {
               type: 'number',
               id: 'worker',
-              min: 1
+              min: 1,
+              oninput: () => model.worker = event.target.value
             }
           ),
           m('label.infra', { for: 'infra' }, 'Infra Nodes'),
@@ -33,7 +61,8 @@ const app = {
             {
               type: 'number',
               id: 'infra',
-              min: 1
+              min: 1,
+              oninput: () => model.infra = event.target.value
             }
           ),
           m('.core-count', "please enter the number of cores per server"),
@@ -45,9 +74,18 @@ const app = {
                 name: 'cores', 
                 checked: model.cores === x, 
                 onchange: () => model.cores = x 
-              } 
-            ), 
-            x 
+                } 
+              ),   
+              x 
+            )
+          ),
+          m('.mem', "please enter the amount of memory per server (GB)" ),
+          m('input', {
+            type: Number,
+            id: 'memory',
+            min: 1,
+            onchange: () => model.memory = event.target.value
+            }
           )
         ),
         m('.storage-info', 
@@ -57,7 +95,8 @@ const app = {
             {
               type: 'number',
               id: 'localdisk',
-              min: 1
+              min: 1,
+              onchange: () => model.localtotal = event.target.value
             }
           ),
           m('label.storage', { for: 'file' }, 'File Storage'),
@@ -65,7 +104,8 @@ const app = {
             {
               type: 'number',
               id: 'file',
-              min: 1
+              min: 1,
+              onchange: () => model.filetotal = event.target.value
             }
           ),
           m('label.storage', { for: 'block' }, 'Block Srtorage'),
@@ -73,7 +113,8 @@ const app = {
             {
               type: 'number',
               id: 'block',
-              min: 1
+              min: 1,
+              onchange: () => model.blocktotal = event.target.value
             }
           ),
           m('label.storage', { for: 'object' }, 'Object Storage'),
@@ -81,30 +122,19 @@ const app = {
             {
               type: 'number',
               id: 'object',
-              min: 1
+              min: 1,
+              onchange: () => model.objtotal = event.target.value
             }
           )
         ),
         m('.totals-info',
           m('.subject', 'Totals for Infrastructure'),
-            m('.t-cpu', 'CPU Total',
-              m('.t-int')
-            ),
-            m('.t-mem', 'Memory Total',
-              m('.t-int')
-            ),
-            m('.t-ld', 'Local Disk Total',
-              m('.t-int')
-            ),
-            m('.t-cpu', 'File Disk Total',
-              m('.t-int')
-            ),
-            m('.t-cpu', 'Block Disk Total',
-              m('.t-int')
-            ),
-            m('.t-cpu', 'Object Storage Total',
-              m('.t-int')
-             )
+            m('.t-int', 'CPU Total = ' + ((model.control * model.worker * model.infra) * model.cores)),
+            m('.t-mem', 'Memory Total = ' + ( (model.control * model.worker *model.infra) * model.memory )),
+            m('.t-ld', 'Local Disk Total = ' + ( model.localtotal )),
+            m('.t-cpu', 'File Disk Total = ' + ( model.filetotal )),
+            m('.t-cpu', 'Block Disk Total = ' + ( model.blocktotal )),
+            m('.t-cpu', 'Object Storage Total = ' + ( model.objtotal )),
           )
        )
     )
