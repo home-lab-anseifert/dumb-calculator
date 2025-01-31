@@ -29,7 +29,7 @@ const app = {
         m('.totals-info',
           m('.subject', 'Totals for Infrastructure'),
             m('.t-int', 'CPU Total = ' + ((model.control * model.worker * model.infra) * model.cores)),
-            m('.t-mem', 'Memory Total = ' + ( (model.control * model.worker *model.infra) * model.memory )),
+            m('.t-mem', 'Memory Total = ' + ( (model.control + model.worker + model.infra) * model.memory )),
             m('.t-ld', 'Local Disk Total = ' + ( model.localtotal )),
             m('.t-cpu', 'File Disk Total = ' + ( model.filetotal )),
             m('.t-cpu', 'Block Disk Total = ' + ( model.blocktotal )),
